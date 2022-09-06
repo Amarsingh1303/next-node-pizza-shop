@@ -1,9 +1,18 @@
 import styles from "../styles/Cart.module.css";
 import Image from "next/image";
 import { useSelector } from "react-redux";
+import { ExtraOptions, Pizza } from "../types";
+import { RootState } from "../redux/store";
+
+type Product = {
+  quantity: number;
+  price: number;
+} & Pizza;
 
 const Cart = () => {
-  const { products, quantity, total } = useSelector((state) => state.cart);
+  const { products, quantity, total } = useSelector(
+    (state: RootState) => state.cart
+  );
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -17,7 +26,7 @@ const Cart = () => {
               <th>Quantity</th>
               <th>Total</th>
             </tr>
-            {products.map((product) => (
+            {products.map((product: Product) => (
               <tr className={styles.tr} key={product._id}>
                 <td>
                   <div className={styles.imgContainer}>
@@ -35,7 +44,7 @@ const Cart = () => {
                 <td>
                   <span className={styles.extras}>
                     {/* Double ingredient, spicy sauce */}
-                    {product.extraOptions.map((extra) => (
+                    {product.extraOptions.map((extra: ExtraOptions) => (
                       <span key={extra._id}>{extra.text}, </span>
                     ))}
                   </span>

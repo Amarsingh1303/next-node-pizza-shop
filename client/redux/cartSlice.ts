@@ -1,6 +1,18 @@
 import {createSlice} from '@reduxjs/toolkit'
+import { Pizza } from '../types'
 
-const initialState = {
+type Products={
+  quantity:number
+  price:number
+} & Pizza
+
+type initialStateType ={
+products:Products[]
+total:number
+quantity:number
+}
+
+const initialState:initialStateType = {
     products:[],
     total:0,
     quantity:0

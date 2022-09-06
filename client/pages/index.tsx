@@ -3,8 +3,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Featured from "../components/Featured";
 import PizzaList from "../components/PizzaList";
+import { Pizza } from "../types";
 
-const Home: NextPage = ({ pizzaList }) => {
+type HomePage = {
+  pizzaList: Pizza[];
+};
+
+const Home = ({ pizzaList }: HomePage) => {
   return (
     <div>
       <Head>

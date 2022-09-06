@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/PizzaCard.module.css";
+import { Pizza } from "../types";
 
-const PizzaCard = ({ pizza }) => {
+type PizzaCardProps = {
+  pizza: Pizza;
+};
+
+const PizzaCard = ({ pizza }: PizzaCardProps) => {
   return (
     <div className={styles.container}>
       <Link href={`/product/${pizza._id}`}>

@@ -5,8 +5,13 @@ import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../../redux/cartSlice";
+import { ExtraOptions, Pizza } from "../../types";
 
-const Product = ({ pizza }) => {
+export type ProductProps = {
+  pizza: Pizza;
+};
+
+const Product = ({ pizza }: ProductProps) => {
   const [size, setSize] = useState(0);
   const [extraOptions, setExtraOptions] = useState<Array<any>>([]);
   const [price, setPrice] = useState(pizza.prices[0]);
@@ -25,11 +30,11 @@ const Product = ({ pizza }) => {
 
   // const { extraOptions } = pizza;
 
-  const handlePrice = (value) => {
+  const handlePrice = (value: number) => {
     setPrice(price + value);
   };
 
-  const handleSize = (pizzaSize) => {
+  const handleSize = (pizzaSize: number) => {
     // setSize(pizzaSize);
     // handlePrice(pizza.prices[pizzaSize]);
     // setPrice(pizzaSize)
@@ -38,7 +43,10 @@ const Product = ({ pizza }) => {
     handlePrice(differencePrice);
   };
 
-  const handleExtraOptions = (e, option) => {
+  const handleExtraOptions = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    option: ExtraOptions
+  ) => {
     if (e.target.checked) {
       setExtraOptions([...extraOptions, option]);
       // setExtras((prev) => [...prev, option]);
