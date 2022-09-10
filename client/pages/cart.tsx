@@ -1,6 +1,6 @@
 import styles from "../styles/Cart.module.css";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ExtraOptions, Pizza } from "../types";
 import { RootState } from "../redux/store";
 import {
@@ -9,6 +9,10 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { reset } from "../redux/cartSlice";
+import OrderDetailModal from "../components/OrderDetailModal";
 
 type Product = {
   quantity: number;
@@ -16,13 +20,31 @@ type Product = {
 } & Pizza;
 
 const Cart = () => {
-  const [open, setOpen] = useState(false);
-  const amount = "2";
-  const currency = "USD";
-  const style = { layout: "vertical" };
   const { products, quantity, total } = useSelector(
     (state: RootState) => state.cart
   );
+  const [open, setOpen] = useState(false);
+  const [cash, setCash] = useState(false);
+  const amount = total;
+  const currency = "USD";
+  const style = { layout: "vertical" };
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const createOrder = async (data) => {
+    console.log("data", data);
+    try {
+      const res = await axios.post("http://localhost:5000/api/order", data);
+      console.log("res", res);
+      if (res.status === 201) {
+        dispatch(reset());
+        router.push(`/orders/${res.data._id}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const ButtonWrapper = ({ currency, showSpinner }) => {
     // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
     // This is the main reason to wrap the PayPalButtons in a new component
@@ -64,9 +86,17 @@ const Cart = () => {
               });
           }}
           onApprove={function (data, actions) {
-            return actions.order.capture().then(function () {
-              console.log("data", data);
+            return actions.order.capture().then(function (details) {
               // Your code here after capture the order
+              // console.log("data", data);
+              // console.log("details", details);
+              const shipping = details.purchase_units[0].shipping;
+              createOrder({
+                customer: shipping!.name!.full_name,
+                address: shipping!.address!.address_line_1,
+                total: total,
+                method: 1,
+              });
             });
           }}
         />
@@ -139,10 +169,15 @@ const Cart = () => {
           </div>
           {open ? (
             <div className={styles.paymentMethods}>
-              <button className={styles.payButton}>CASH ON DELIVERY</button>
+              <button
+                className={styles.payButton}
+                onClick={() => setCash(true)}
+              >
+                CASH ON DELIVERY
+              </button>
               <PayPalScriptProvider
                 options={{
-                  "client-id": "test",
+                  "client-id": `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET}`,
                   components: "buttons",
                   currency: "USD",
                   "disable-funding": "credit,card,p24",
@@ -156,6 +191,7 @@ const Cart = () => {
               CHECKOUT NOW!
             </button>
           )}
+          {cash && <OrderDetailModal total={total} createOrder={createOrder} />}
         </div>
       </div>
     </div>

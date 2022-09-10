@@ -12,3 +12,12 @@ export type Pizza={
     desc: string;
     extraOptions: Array<ExtraOptions>;
   };
+
+export type Order = {
+    _id:number,
+    customer:string
+    address:string,
+    total: number,
+    status:number,
+    method:number
+  }

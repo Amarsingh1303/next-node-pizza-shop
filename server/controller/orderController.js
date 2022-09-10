@@ -19,7 +19,7 @@ const addOrder = async (req, res, next) => {
   const createdOrder = new Order(req.body);
   try {
     await createdOrder.save();
-    res.status(200).json({ createdOrder });
+    res.status(201).json(createdOrder);
   } catch (error) {
     console.log("error", error);
     res.status(404).json({ error });
