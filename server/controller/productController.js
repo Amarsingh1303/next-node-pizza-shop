@@ -18,7 +18,7 @@ const addProduct = async (req, res, next) => {
   const createdProduct = new Product(req.body);
   try {
     await createdProduct.save();
-    res.status(200).json({ createdProduct });
+    res.status(201).json({ createdProduct });
   } catch (error) {
     console.log("error", error);
     res.status(404).json({ error });

@@ -1,6 +1,9 @@
 import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useState } from "react";
+import AddButton from "../components/AddButton";
+import AddPizzaModal from "../components/AddPizzaModal";
 import Featured from "../components/Featured";
 import PizzaList from "../components/PizzaList";
 import { Pizza } from "../types";
@@ -10,6 +13,7 @@ type HomePage = {
 };
 
 const Home = ({ pizzaList }: HomePage) => {
+  const [close, setClose] = useState(true);
   return (
     <div>
       <Head>
@@ -18,7 +22,9 @@ const Home = ({ pizzaList }: HomePage) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Featured />
+      <AddButton setClose={setClose} />
       <PizzaList pizzaList={pizzaList} />
+      {!close && <AddPizzaModal setClose={setClose} />}
     </div>
   );
 };

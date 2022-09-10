@@ -39,7 +39,7 @@ const Order = ({ order }: OrderProps) => {
                   <span className={styles.address}>{address}</span>
                 </td>
                 <td>
-                  <span className={styles.total}>{total}</span>
+                  <span className={styles.total}>${total}</span>
                 </td>
               </tr>
             </tbody>
