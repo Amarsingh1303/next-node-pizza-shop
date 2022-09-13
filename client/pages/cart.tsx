@@ -1,7 +1,7 @@
 import styles from "../styles/Cart.module.css";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { ExtraOptions, Pizza } from "../types";
+import { ExtraOptions, Order, Pizza } from "../types";
 import { RootState } from "../redux/store";
 import {
   PayPalScriptProvider,

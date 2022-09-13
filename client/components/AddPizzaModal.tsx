@@ -1,28 +1,39 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import styles from "../styles/AddPizzaModal.module.css";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { ExtraOptions } from "../types";
 
-const AddPizzaModal = ({ setClose }) => {
-  const [file, setFile] = useState(null);
-  const [title, setTitle] = useState(null);
-  const [desc, setDesc] = useState(null);
-  const [prices, setPrices] = useState([]);
-  const [extraOptions, setExtraOptions] = useState([]);
-  const [extra, setExtra] = useState(null);
+type AddPizzaModalProps = {
+  setClose: (value: boolean) => void;
+};
 
-  const changePrice = (e, index) => {
+type extraType = {
+  text: string;
+  price: number;
+};
+
+const AddPizzaModal = ({ setClose }: AddPizzaModalProps) => {
+  const [file, setFile] = useState<any | null>(null);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState<string | null>(null);
+  const [prices, setPrices] = useState<any>([]);
+  const [extraOptions, setExtraOptions] = useState<Array<ExtraOptions> | null>(
+    [] as Array<ExtraOptions> | null
+  );
+  const [extra, setExtra] = useState({} as extraType);
+
+  const changePrice = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const currentPrices = prices;
     currentPrices[index] = e.target.value;
     setPrices(currentPrices);
   };
 
-  const handleExtraInput = (e) => {
+  const handleExtraInput = (e: ChangeEvent<HTMLInputElement>) => {
     setExtra({ ...extra, [e.target.name]: e.target.value });
   };
 
-  const handleExtra = (e) => {
-    setExtraOptions((prev) => [...prev, extra]);
+  const handleExtra = () => {
+    setExtraOptions((prev: any) => [...prev, extra]);
   };
 
   const handleCreate = async () => {
@@ -63,7 +74,7 @@ const AddPizzaModal = ({ setClose }) => {
         <h1>Add a new Pizza</h1>
         <div className={styles.item}>
           <label className={styles.label}>Choose an image</label>
-          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <input type="file" onChange={(e) => setFile(e.target.files![0])} />
         </div>
         <div className={styles.item}>
           <label className={styles.label}>Title</label>
@@ -77,7 +88,7 @@ const AddPizzaModal = ({ setClose }) => {
           <label className={styles.label}>Desc</label>
           <textarea
             rows={4}
-            type="text"
+            // type="text"
             onChange={(e) => setDesc(e.target.value)}
           />
         </div>
@@ -126,7 +137,7 @@ const AddPizzaModal = ({ setClose }) => {
             </button>
           </div>
           <div className={styles.extraItems}>
-            {extraOptions.map((option) => (
+            {extraOptions!.map((option: ExtraOptions) => (
               <span key={option.text} className={styles.extraItem}>
                 {option.text}
               </span>

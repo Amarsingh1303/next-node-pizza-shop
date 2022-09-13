@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import { Pizza } from '../types'
 
 type Products={
@@ -27,7 +27,7 @@ const cartSlice = createSlice({
             state.quantity +=1
             state.total += action.payload.price * action.payload.quantity
         },
-        reset:(state,action)=>{
+        reset:(state,action:PayloadAction)=>{
             state.products = [];
             state.quantity = 0;
             state.total = 0;
