@@ -1,4 +1,4 @@
-# next-node-pizza-shop
+# Next-Node-Pizza-Shop
 #This is a pizza-shop project based on the MERN STACK.
 Technology used :
 # REACT JS
